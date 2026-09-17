@@ -11,7 +11,24 @@ namespace FinanceApp
     {
         public DateTime Date { get; set; }
         public string Resource { get; set; }
-        public Double Sum { get; set; }
+        public double Sum { get; set; }
+        public T[] FromFile<T>(string file) where T : Finance, new()
+        {
+            List<T> finances = new List<T>();
+            using (StreamReader streamReader = new StreamReader(file))
+            {
+                string line;
+                while ((line = streamReader.ReadLine()) != null)
+                {
+                    if (string.IsNullOrWhiteSpace(line)) { continue; }
+                    T finance = new T();
+                    finance.FromString(line);
+                    finances.Add(finance);
+                }
+                return finances.ToArray();
+            }
+
+        }
         public virtual void FromString(string input) 
         { 
             string[] s = input.Trim().Split(' '); 

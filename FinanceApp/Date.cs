@@ -8,25 +8,7 @@ using System.IO;
 namespace FinanceApp
 {
     internal class Date
-    {
-        public T[] FromFile<T>(string file) where T : Finance, new()
-        {
-            List<T> finances = new List<T>();
-            using (StreamReader streamReader = new StreamReader(file))
-            {
-                string line;
-                while ((line = streamReader.ReadLine()) != null)
-                {
-                    if (string.IsNullOrWhiteSpace(line)) { continue; }
-                    T finance = new T();
-                    finance.FromString(line);
-                    finances.Add(finance);
-                }
-                return finances.ToArray();
-            }
-
-        }
-        public T MinDate<T>(T[] finance) where T: Finance
+    {   public T MinDate<T>(T[] finance) where T: Finance
         {
             T min = finance[0];
             foreach (T item in finance)
