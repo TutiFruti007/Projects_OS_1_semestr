@@ -11,31 +11,39 @@ namespace FinanceApp
     {
         static void Main(string[] args)
         {
-            string input = Console.ReadLine();
-            string input2 = Console.ReadLine();
-            string input3 = Console.ReadLine();
-            string input4 = Console.ReadLine();
-
-            Finance finance = new Finance();
+            Finance finance1 = new Finance();
             Finance finance2 = new Finance();
             Finance finance3 = new Finance();
-            Finance finance4 = new Finance();
+            finance1.FromString("2026-09-15 Salary 50000");
+            finance2.FromString("2026-09-10 Food 3000");
+            finance3.FromString("2026-09-20 Bonus 10000");
 
-            finance.FromString(input);
-            finance2.FromString(input2);
+            Date date = new Date();
 
-            finance.MinDate(new Finance[] { finance, finance2 });
+            Finance min = date.MinDate(new Finance[]
+            {
+                finance1,
+                finance2,
+                finance3
+            });
 
-            finance.PlusDay();
+            Console.WriteLine("Минимальная дата:");
+            Console.WriteLine($"{min.Date:yyyy-MM-dd} {min.Resource} {min.Sum}");
 
-            Finance days = new Finance().BetweenDays(new Finance[] { finance, finance2, finance3, finance4 });
+            date.PlusDay(finance1);
 
-            string path = "data.txt";
+            Console.WriteLine("\nДата finance1 после PlusDay:");
+            Console.WriteLine($"{finance1.Date:yyyy-MM-dd}");
 
-            string content = $"{finance.Date}, {finance.Resource}, {finance.Sum}" +
-                $" \n {finance2.Date}, {finance2.Resource}, {finance2.Sum} " +
-                $"\n {days} ";
-            File.WriteAllText(path, content);
-        }
+            Finance close = date.BetweenDays(new Finance[]
+            {
+                finance1,
+                finance2,
+                finance3
+            });
+
+            Console.WriteLine("\nОбъект, ближайший к середине:");
+            Console.WriteLine($"{close.Date:yyyy-MM-dd} {close.Resource} {close.Sum}");
+    }
     }
 }
