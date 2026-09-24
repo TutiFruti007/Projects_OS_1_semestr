@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 
 namespace FinanceApp
 {
     internal class Date
-    {   public T MinDate<T>(T[] finance) where T: Finance
+    {
+        public T MinDate<T>(T[] finance) where T : Finance
         {
             T min = finance[0];
+
             foreach (T item in finance)
             {
                 if (item.Date < min.Date)
@@ -18,13 +15,15 @@ namespace FinanceApp
                     min = item;
                 }
             }
-            return min;
 
+            return min;
         }
+
         public void PlusDay<T>(T obj) where T : Finance
         {
             obj.Date = obj.Date.AddDays(1);
         }
+
         public T BetweenDays<T>(T[] finance) where T : Finance
         {
             T min = finance[0];
@@ -43,7 +42,8 @@ namespace FinanceApp
                 }
             }
 
-            DateTime middle = min.Date.AddDays((max.Date - min.Date).Days / 2);
+            DateTime middle =
+                min.Date.AddDays((max.Date - min.Date).Days / 2);
 
             T close = finance[0];
 
@@ -58,6 +58,5 @@ namespace FinanceApp
 
             return close;
         }
-
     }
 }
