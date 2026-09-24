@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace FinanceApp
 {
@@ -7,12 +9,15 @@ namespace FinanceApp
         static void Main(string[] args)
         {
             Finance finance = new Finance();
+            List<Finance> finances = new List<Finance>();
 
             while (true)
             {
                 Console.WriteLine();
                 Console.WriteLine("1 - Добавить из строки");
                 Console.WriteLine("2 - Добавить из файла");
+                Console.WriteLine("3 - Сохранить в файла");
+                Console.WriteLine("4 - Вывести");
                 Console.WriteLine("0 - Выход");
 
                 string answer = Console.ReadLine();
@@ -23,9 +28,7 @@ namespace FinanceApp
 
                     string input = Console.ReadLine();
 
-                    Finance result = Finance.Create(input);
-
-                    Console.WriteLine(result);
+                    finances.Add(Finance.Create(input));
                 }
                 else if (answer == "2")
                 {
@@ -33,12 +36,28 @@ namespace FinanceApp
 
                     string file = Console.ReadLine();
 
-                    Finance[] finances = finance.FromFile(file);
-
-                    foreach (Finance item in finances)
+                    foreach (Finance item in finance.FromFile(file))
                     {
-                        Console.WriteLine(item);
+                        finances.Add(item);
                     }
+                }
+                else if (answer == "3") {
+                    Console.WriteLine("Файл куда записывать");
+                    string file_appand = Console.ReadLine();
+                    Console.WriteLine("сколько хотите добавить строк");
+                    int num = int.Parse(Console.ReadLine());
+                    for (int i = 0; i < num; i++) {
+                        string line = Console.ReadLine();
+                        finances.Add(Finance.Create(line));
+                    }
+                    finance.InFile(file_appand, finances);                    
+                }
+                else if (answer == "4")
+                {
+                    foreach (var item in finances) {
+                        Console.WriteLine(item.ToString());
+                    }
+
                 }
                 else if (answer == "0")
                 {

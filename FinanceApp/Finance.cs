@@ -34,7 +34,7 @@ namespace FinanceApp
             return finance;
         }
 
-        public Finance[] FromFile(string file)
+        public List<Finance> FromFile(string file)
         {
             List<Finance> finances = new List<Finance>();
 
@@ -51,7 +51,7 @@ namespace FinanceApp
                 }
             }
 
-            return finances.ToArray();
+            return finances;
         }
 
         public virtual void FromString(string input)
@@ -68,11 +68,11 @@ namespace FinanceApp
             return $"{Date:yyyy-MM-dd} {Resource} {Sum}";
         }
 
-        public virtual void InFile(string file, Finance[] finances)
+        public virtual void InFile(string file, List<Finance> finances)
         {
             foreach (Finance finance in finances)
             {
-                File.AppendAllText(file, finance.ToString() + "\n");
+                File.AppendAllText(file, Create(finance.ToString()).ToString() + "\n");
             }
         }
 
