@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FinanceApp
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -83,6 +83,9 @@ namespace FinanceApp
             }
             return created;
 
+        }
+         public static Dictionary<string, List<List<string>>>  Def(string input) {
+            return new Dictionary<string, List<List<string>>>();
         }
     }
 }

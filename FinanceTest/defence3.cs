@@ -1,7 +1,8 @@
-﻿using System;
+﻿using FinanceApp;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
+using System;
 using System.Collections.Generic;
 using System.Text;
-
 namespace FinanceTest
 {
     public class defence3
@@ -28,7 +29,7 @@ namespace FinanceTest
                 }
             };
             string graf = "A --|> B \n C --|> B \n E --|> A \n  F --|> C \n  F --|> C \n A o-> E ";
-            Dictionary<string, List<List<string>>> result = Def(graf);
+            Dictionary<string, List<List<string>>> result = FinanceApp.Program.Def(graf);
 
             Assert.Equal(result , dictionary);
 
@@ -37,8 +38,11 @@ namespace FinanceTest
         public void Test2()
         {
             string graf = "A --| B \n C -- B \n E -- A \n  F --|> C \n  F C \n A  E ";
-            Assert.Throws<Exception>(() => Def(graf));
+            Assert.Throws<Exception>(() => FinanceApp.Program.Def(graf));
+
 
         }
+
+        
     }
 }
