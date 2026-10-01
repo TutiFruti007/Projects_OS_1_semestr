@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace FinanceApp
 {
@@ -10,7 +9,6 @@ namespace FinanceApp
         {
             Finance finance = new Finance();
             List<Finance> finances = new List<Finance>();
-
             while (true)
             {
                 Console.WriteLine();
@@ -20,54 +18,71 @@ namespace FinanceApp
                 Console.WriteLine("4 - Вывести");
                 Console.WriteLine("0 - Выход");
 
-                string answer = Console.ReadLine();
-
-                if (answer == "1")
+                try
                 {
-                    Console.WriteLine("Введите данные:");
-
-                    string input = Console.ReadLine();
-
-                    finances.Add(Finance.Create(input));
-                }
-                else if (answer == "2")
-                {
-                    Console.WriteLine("Введите путь к файлу:");
-
-                    string file = Console.ReadLine();
-
-                    foreach (Finance item in finance.FromFile(file))
+                    switch (Console.ReadLine())
                     {
-                        finances.Add(item);
-                    }
-                }
-                else if (answer == "3") {
-                    Console.WriteLine("Файл куда записывать");
-                    string file_appand = Console.ReadLine();
-                    Console.WriteLine("сколько хотите добавить строк");
-                    int num = int.Parse(Console.ReadLine());
-                    for (int i = 0; i < num; i++) {
-                        string line = Console.ReadLine();
-                        finances.Add(Finance.Create(line));
-                    }
-                    finance.InFile(file_appand, finances);                    
-                }
-                else if (answer == "4")
-                {
-                    foreach (var item in finances) {
-                        Console.WriteLine(item.ToString());
-                    }
+                        case "1":
+                            Console.WriteLine("Введите данные:");
+                            Finance created = FinanceNull(Console.ReadLine());
+                            if (created != null) finances.Add(created);
+                            break;
+                        case "2":
+                            Console.WriteLine("Введите путь к файлу:");
+                            foreach (Finance item in finance.FromFile(Console.ReadLine()))
+                            {
+                                finances.Add(item);
+                            }
+                            break;
+                        case "3":
+                            Console.WriteLine("Файл куда записывать:");
+                            string file = Console.ReadLine();
+                            Console.WriteLine("Сколько хотите добавить строк:");
+                            if (!int.TryParse(Console.ReadLine(), out int num) || num < 0)
+                            {
+                                Console.WriteLine("Нужно ввести целое число.");
+                                break;
+                            }
+                            List<Finance> newItems = new List<Finance>();
+                            for (int i = 0; i < num; i++)
+                            {
+                                Finance item = FinanceNull(Console.ReadLine());
+                                if (item != null) newItems.Add(item);
+                            }
+                            Finance.InFile(file, newItems);
+                            foreach (Finance item in newItems)
+                            {
+                                finances.Add(item);
+                            }
+                            break;
+                        case "4":
+                            foreach (Finance item in finances)
+                            {
+                                Console.WriteLine(item);
+                            }
+                            break;
 
+                        case "0":
+                            return;
+                        default:
+                            Console.WriteLine("Неверный выбор.");
+                            break;
+                    }
                 }
-                else if (answer == "0")
+                catch (Exception ex)
                 {
-                    return;
-                }
-                else
-                {
-                    Console.WriteLine("Неверный выбор.");
+                    Console.WriteLine("Ошибка: " + ex.Message);
                 }
             }
+        }
+        static Finance FinanceNull(string line) { 
+            Finance created = Finance.Create(line);
+            if (created == null) 
+            {
+                Console.WriteLine("не удалось считать файл");
+            }
+            return created;
+
         }
     }
 }

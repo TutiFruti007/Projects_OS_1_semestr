@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="FinanceApp/FinanceApp.csproj" Id="e20cee4b-494f-410f-971d-24600b9731ec" />
+  <Project Path="FinanceTest/FinanceTest.csproj" Id="3941ab55-8483-4cf8-84d7-55dccaba6a7f" />
 </Solution>

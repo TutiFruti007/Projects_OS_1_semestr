@@ -4,49 +4,63 @@ using System.IO;
 
 namespace FinanceApp
 {
-    internal class Finance
+    public class Finance
     {
+        public string NameClass { get; set; }
         public DateTime Date { get; set; }
         public string Resource { get; set; }
         public double Sum { get; set; }
 
         public static Finance Create(string input)
         {
+            if (string.IsNullOrWhiteSpace(input)) return null;
+
             string[] s = input.Trim().Split(' ');
 
             Finance finance;
 
-            if (s.Length == 6)
+            if (s[0] == "Зарплата")
             {
                 finance = new Salary();
             }
-            else if (s.Length == 5)
+            else if (s[0] == "Добавка")
             {
                 finance = new Prize();
             }
-            else
+            else if (s[0] == "Финансы")
             {
                 finance = new Finance();
             }
+            else
+            {
+                return null;
+            }
 
-            finance.FromString(input);
+            bool ok = finance.FromString(input);
 
-            return finance;
+            return ok ? finance : null;
         }
 
         public List<Finance> FromFile(string file)
         {
             List<Finance> finances = new List<Finance>();
-
-            using (StreamReader streamReader = new StreamReader(file))
+            if (File.Exists(file))
             {
-                string line;
 
-                while ((line = streamReader.ReadLine()) != null)
+                using (StreamReader streamReader = new StreamReader(file))
                 {
-                    if (!string.IsNullOrWhiteSpace(line))
+                    string line;
+
+                    while ((line = streamReader.ReadLine()) != null)
                     {
-                        finances.Add(Create(line));
+                        if (!string.IsNullOrWhiteSpace(line))
+                        {
+                            Finance created = Create(line);
+                            if (created != null)
+                            {
+                                finances.Add(created);
+                            }
+                        }
                     }
                 }
             }
@@ -54,25 +68,34 @@ namespace FinanceApp
             return finances;
         }
 
-        public virtual void FromString(string input)
+        public virtual bool FromString(string input)
         {
             string[] s = input.Trim().Split(' ');
+            if (s.Length < 4) { return false; }
 
-            Date = DateTime.Parse(s[0]);
-            Resource = s[1];
-            Sum = Convert.ToDouble(s[2]);
+            NameClass = s[0];
+
+            bool dateOk = DateTime.TryParse(s[1], out DateTime date);
+            Date = date;
+
+            Resource = s[2];
+
+            bool sumOk = double.TryParse(s[3], out double sum);
+            Sum = sum;
+
+            return dateOk && sumOk;
         }
 
         public override string ToString()
         {
-            return $"{Date:yyyy-MM-dd} {Resource} {Sum}";
+            return $"{NameClass} {Date:yyyy-MM-dd} {Resource} {Sum}";
         }
 
-        public virtual void InFile(string file, List<Finance> finances)
+        public static void InFile(string file, List<Finance> finances)
         {
             foreach (Finance finance in finances)
             {
-                File.AppendAllText(file, Create(finance.ToString()).ToString() + "\n");
+                File.AppendAllText(file, finance.ToString() + "\n");
             }
         }
 

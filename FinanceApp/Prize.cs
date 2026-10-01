@@ -2,29 +2,35 @@
 
 namespace FinanceApp
 {
-    internal class Prize : Finance
+    public class Prize : Finance
     {
         public string Name { get; set; }
         public string Description { get; set; }
 
         public override string ToString()
         {
-            return $"{Date:yyyy-MM-dd} " +
-                   $"{Resource} " +
-                   $"{Sum} " +
-                   $"{Name} " +
-                   $"{Description}";
+            return $"{NameClass} {Date:yyyy-MM-dd} {Resource} {Sum} {Name} {Description}";
         }
 
-        public override void FromString(string input)
+        public override bool FromString(string input)
         {
-            string[] s = input.Trim().Split(' ');
+            string[] s = input.Trim().Split(' ', 6);
+            if (s.Length < 6) { return false; }
 
-            Date = DateTime.Parse(s[0]);
-            Resource = s[1];
-            Sum = Convert.ToDouble(s[2]);
-            Name = s[3];
-            Description = s[4];
+            NameClass = s[0];
+
+            bool dateOk = DateTime.TryParse(s[1], out DateTime date);
+            Date = date;
+
+            Resource = s[2];
+
+            bool sumOk = double.TryParse(s[3], out double sum);
+            Sum = sum;
+
+            Name = s[4];
+            Description = s[5];
+
+            return dateOk && sumOk;
         }
     }
 }
